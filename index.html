@@ -24,51 +24,49 @@
     </style>
 </head>
 <body>
-    <h1>WebSocket Client For Messages</h1>
+    <h1>WebSocket Client</h1>
     <div id="messages"></div>
-
 
     <script>
         const userId = '66c457627eacbb5a9b1d8d8c';
         const socket = new WebSocket(`ws://localhost:5000?userId=${userId}`);
 
-        // Load messages from localStorage
+        // Load messages from localStorage and display them
         function loadMessages() {
-            const messages = JSON.parse(localStorage.getItem('messages')) || [];
             const messageContainer = document.getElementById('messages');
-            messages.forEach(msg => {
+            const storedMessages = JSON.parse(localStorage.getItem('messages')) || [];
+
+            storedMessages.forEach(message => {
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('message');
-                messageElement.textContent = msg;
+                messageElement.textContent = message;
                 messageContainer.appendChild(messageElement);
             });
+
             messageContainer.scrollTop = messageContainer.scrollHeight;
         }
 
-        // Save message to localStorage
+        // Save a new message to localStorage
         function saveMessage(message) {
-            const messages = JSON.parse(localStorage.getItem('messages')) || [];
-            messages.push(message);
-            localStorage.setItem('messages', JSON.stringify(messages));
+            const storedMessages = JSON.parse(localStorage.getItem('messages')) || [];
+            storedMessages.push(message);
+            localStorage.setItem('messages', JSON.stringify(storedMessages));
         }
 
         socket.onopen = function () {
             console.log('WebSocket connection established');
-            loadMessages();
         };
 
         socket.onmessage = function (event) {
+            const data = JSON.parse(event.data);
             const messageContainer = document.getElementById('messages');
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
-            messageElement.textContent = event.data;
+            messageElement.textContent = data.message;
             messageContainer.appendChild(messageElement);
 
-            // Scroll to the bottom of the message container
             messageContainer.scrollTop = messageContainer.scrollHeight;
-
-            // Save the message to localStorage
-            saveMessage(event.data);
+            saveMessage(data.message);
         };
 
         socket.onclose = function () {
@@ -78,6 +76,9 @@
         socket.onerror = function (error) {
             console.error('WebSocket error:', error);
         };
+
+        // Load messages when the page loads
+        window.onload = loadMessages;
     </script>
 </body>
 </html>
