@@ -1,0 +1,13 @@
+### Create a Task
+POST http://localhost:5000/api/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmM0NTlkNDMxYjZjOWZkODI3ODU1ZTMiLCJpYXQiOjE3MjQxNjkzODMsImV4cCI6MTcyNDI1NTc4M30.hnWoW2Ml-haPyHa5JtfMVYQ0Nb-N8DdQLmSTThgMs9I
+
+{
+    "title": "Siddhu from srikakuam",
+    "description": "This is Socket test",
+    "assignedTo": "66c457627eacbb5a9b1d8d8c",
+    "dueDate": "2024-08-31T23:59:59.999Z",
+    "isRecurring": true,
+    "recurrenceInterval": "weekly"
+}
